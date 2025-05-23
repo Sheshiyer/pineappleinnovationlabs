@@ -405,8 +405,236 @@ const animateNinthGrid = () => {
   });
 };
 
+// Service section interactions
+const initServiceSection = () => {
+  // Get all service expand buttons
+  const expandButtons = document.querySelectorAll('.service-expand-btn');
+  
+  // Add click event to each button
+  expandButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Get the details element
+      const detailsId = button.getAttribute('aria-controls');
+      const details = document.getElementById(detailsId);
+      
+      // Toggle expanded state
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', !isExpanded);
+      
+      if (isExpanded) {
+        // Hide details
+        details.classList.remove('expanded');
+        setTimeout(() => {
+          details.hidden = true;
+        }, 500); // Match the transition duration
+        button.textContent = 'Learn more';
+      } else {
+        // Show details
+        details.hidden = false;
+        // Trigger reflow to enable animation
+        void details.offsetWidth;
+        details.classList.add('expanded');
+        button.textContent = 'Show less';
+      }
+    });
+  });
+  
+  // Add scroll animation for service blocks
+  const serviceBlocks = document.querySelectorAll('.service-block');
+  
+  // Create a GSAP timeline for service blocks
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '.services-grid',
+      start: 'top 80%',
+      end: 'bottom 60%',
+      toggleActions: 'play none none reverse'
+    }
+  })
+  .from(serviceBlocks, {
+    y: 50,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.2,
+    ease: 'power3.out'
+  });
+};
+
+// Floating CTA
+const initFloatingCTA = () => {
+  const floatingCta = document.getElementById('floatingCta');
+  
+  // Show floating CTA after scrolling past the first section
+  window.addEventListener('scroll', () => {
+    const scrollPosition = window.scrollY;
+    const firstSection = document.querySelector('.content');
+    
+    if (firstSection && scrollPosition > firstSection.offsetTop + firstSection.offsetHeight) {
+      floatingCta.classList.add('visible');
+    } else {
+      floatingCta.classList.remove('visible');
+    }
+  });
+};
+
+// Contact form handling
+const initContactForm = () => {
+  const contactForm = document.getElementById('contactForm');
+  const formSubmissionMessage = document.getElementById('formSubmissionMessage');
+  const closeMessageButton = document.getElementById('closeMessage');
+  
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = new FormData(contactForm);
+      const formDataObj = {};
+      formData.forEach((value, key) => {
+        formDataObj[key] = value;
+      });
+      
+      // In a real implementation, you would send this data to a server
+      // For now, we'll just simulate a successful submission
+      console.log('Form submission data:', formDataObj);
+      
+      // Show success message
+      formSubmissionMessage.hidden = false;
+      void formSubmissionMessage.offsetWidth; // Trigger reflow
+      formSubmissionMessage.classList.add('visible');
+      
+      // Reset form
+      contactForm.reset();
+    });
+  }
+  
+  if (closeMessageButton) {
+    closeMessageButton.addEventListener('click', () => {
+      formSubmissionMessage.classList.remove('visible');
+      setTimeout(() => {
+        formSubmissionMessage.hidden = true;
+      }, 300); // Match transition duration
+    });
+  }
+  
+  // Form field animations
+  const formFields = document.querySelectorAll('.form-group input, .form-group select, .form-group textarea');
+  
+  formFields.forEach(field => {
+    // Add focus animation
+    field.addEventListener('focus', () => {
+      field.parentElement.classList.add('focused');
+    });
+    
+    field.addEventListener('blur', () => {
+      field.parentElement.classList.remove('focused');
+    });
+  });
+};
+
+// Partners marquee animation
+const initPartnersMarquee = () => {
+  const marqueeContent = document.querySelectorAll('.marquee-content');
+  
+  // Add GSAP animation for the marquee
+  gsap.to(marqueeContent[1], {
+    x: '-100%',
+    repeat: -1,
+    duration: 30,
+    ease: 'linear'
+  });
+  
+  // Add hover effect to pause animation
+  const partnersMarquee = document.querySelector('.partners-marquee');
+  if (partnersMarquee) {
+    partnersMarquee.addEventListener('mouseenter', () => {
+      gsap.to(marqueeContent, { timeScale: 0 });
+    });
+    
+    partnersMarquee.addEventListener('mouseleave', () => {
+      gsap.to(marqueeContent, { timeScale: 1 });
+    });
+  }
+};
+
+// Testimonials slider
+const initTestimonialsSlider = () => {
+  const slides = document.querySelectorAll('.testimonial-slide');
+  const dots = document.querySelectorAll('.dot');
+  const prevButton = document.getElementById('testimonialPrev');
+  const nextButton = document.getElementById('testimonialNext');
+  let currentSlide = 0;
+  
+  // Function to show a specific slide
+  const showSlide = (index) => {
+    // Remove active class from all slides
+    slides.forEach(slide => {
+      slide.classList.remove('active');
+    });
+    
+    // Remove active class from all dots
+    dots.forEach(dot => {
+      dot.classList.remove('active');
+    });
+    
+    // Add active class to current slide and dot
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+  };
+  
+  // Initialize the first slide
+  showSlide(currentSlide);
+  
+  // Event listeners for dots
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      currentSlide = index;
+      showSlide(currentSlide);
+    });
+  });
+  
+  // Event listener for previous button
+  if (prevButton) {
+    prevButton.addEventListener('click', () => {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    });
+  }
+  
+  // Event listener for next button
+  if (nextButton) {
+    nextButton.addEventListener('click', () => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    });
+  }
+  
+  // Auto-advance slides every 5 seconds
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }, 5000);
+  
+  // Add GSAP animations for testimonials
+  gsap.from('.testimonial-slide', {
+    y: 50,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.2,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.testimonials-container',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    }
+  });
+};
+
 // Main initialization function
 const init = () => {
+  // Reduce scroll distance between sections
+  adjustSectionSpacing();
+  
   // Animate the header (frame)
   animateFrame();
 
@@ -417,6 +645,21 @@ const init = () => {
   animateFourthGrid();
   animateFifthGrid();
   animateSixthGrid();
+  
+  // Initialize service section interactions
+  initServiceSection();
+  
+  // Initialize floating CTA
+  initFloatingCTA();
+  
+  // Initialize contact form
+  initContactForm();
+  
+  // Initialize partners marquee
+  initPartnersMarquee();
+  
+  // Initialize testimonials slider
+  initTestimonialsSlider();
   
   // Initialize our custom effects
   effectsInstances = initEffects({
@@ -442,10 +685,88 @@ const init = () => {
     // Configure text animations
     textAnimations: {
       staggerAmount: 0.06,  // Slightly more staggered for better visual effect
-      animationDuration: 1.4 // Slightly longer duration for smoother animations
+      animationDuration: 1.4, // Slightly longer duration for smoother animations
+      paragraphSelector: '.content__text, p:not(.type-tiny)', // Target all paragraphs
     }
   });
 };
+
+/**
+ * Adjust spacing between sections to create a more cohesive narrative flow
+ * This reduces the scroll distance between sections while maintaining visual separation
+ */
+const adjustSectionSpacing = () => {
+  // Get all content sections
+  const sections = document.querySelectorAll('.content');
+  
+  // Skip the first section (intro)
+  for (let i = 1; i < sections.length; i++) {
+    const section = sections[i];
+    
+    // Adjust spacing based on section type
+    if (section.classList.contains('content--full')) {
+      // Full-width sections (with grids) get no negative margin
+      section.style.marginTop = '0';
+    } else {
+      // Text-focused sections also get no negative margin
+      section.style.marginTop = '0';
+      
+      // Add a subtle visual separator
+      const separator = document.createElement('div');
+      separator.className = 'section-separator';
+      separator.style.height = '1px';
+      separator.style.width = '25%';
+      separator.style.margin = '0 auto 2rem auto';
+      separator.style.background = 'linear-gradient(to right, transparent, var(--color-link), transparent)';
+      separator.style.opacity = '0.3';
+      
+      // Insert at the beginning of the section
+      if (section.firstChild) {
+        section.insertBefore(separator, section.firstChild);
+      } else {
+        section.appendChild(separator);
+      }
+    }
+    
+    // Update ScrollTrigger for this section
+    ScrollTrigger.refresh();
+  }
+  
+  // Narrative connections without the brown highlighting effect
+  const narrativeConnections = [
+    {from: '#intro', to: '#about', theme: 'identity'},
+    {from: '#about', to: '#vision', theme: 'future'},
+    {from: '#vision', to: '#process', theme: 'method'},
+    {from: '#process', to: '#collaborations', theme: 'partnership'}
+  ];
+  
+  narrativeConnections.forEach(connection => {
+    const fromSection = document.querySelector(connection.from);
+    const toSection = document.querySelector(connection.to);
+    
+    if (fromSection && toSection) {
+      // Create a visual connection element but don't make it visible
+      // This maintains the spacing without the brown highlighting effect
+      const connector = document.createElement('div');
+      connector.className = 'narrative-connector';
+      connector.setAttribute('data-theme', connection.theme);
+      connector.style.position = 'relative';
+      connector.style.zIndex = '1';
+      connector.style.height = '5vh';
+      connector.style.marginTop = '0';
+      connector.style.marginBottom = '0';
+      connector.style.opacity = '0'; // Keep it invisible
+      
+      // Insert connector between sections
+      if (toSection.previousElementSibling !== fromSection) {
+        toSection.parentNode.insertBefore(connector, toSection);
+      }
+      
+      // No animation for the connector - this removes the brown highlighting effect
+    }
+  });
+};
+
 // Preload images and initialize animations
 preloadImages('.grid__img').then(() => {
   document.body.classList.remove('loading'); // Remove the loading class from the body

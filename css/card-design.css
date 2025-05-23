@@ -1,0 +1,443 @@
+/**
+ * Card Design CSS
+ * Implements glassmorphic card design with rounded edges and breaks between cards
+ */
+
+/* Base card styles with glassmorphic effect */
+.card {
+  background: rgba(26, 23, 20, 0.7); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Blur effect for elements behind the card */
+  -webkit-backdrop-filter: blur(10px); /* For Safari support */
+  border-radius: 16px; /* Consistent rounded corners for all cards */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  padding: 2rem;
+  margin-bottom: 2rem; /* Space between cards */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.5s ease;
+  overflow: hidden; /* Ensure content doesn't overflow rounded corners */
+  position: relative; /* For potential decorative elements */
+}
+
+/* Hover effect for cards with animated gradient border */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Animated gradient border on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px; /* Match card border radius */
+  padding: 2px; /* Border thickness */
+  background: linear-gradient(
+    90deg, 
+    var(--color-link) 0%, 
+    var(--color-link-hover) 25%, 
+    var(--color-bg-frame) 50%, 
+    var(--color-link-hover) 75%, 
+    var(--color-link) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Animate the gradient on hover */
+.card:hover::before {
+  opacity: 1;
+  animation: gradientMove 3s linear infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Card header styles */
+.card-header {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.card-header::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: var(--color-link);
+  transition: width 0.3s ease;
+}
+
+.card:hover .card-header::after {
+  width: 100px;
+}
+
+.card-title {
+  font-family: "RishgularModel", sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-link);
+}
+
+.card-subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Card content styles */
+.card-content {
+  margin-bottom: 1.5rem;
+}
+
+.card-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Text alignment consistency - make all text descriptions left-aligned */
+.content__text {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: left !important;
+}
+
+/* Override any creative positioning from base.css */
+.content:nth-of-type(odd) .content__text,
+.content:nth-of-type(3n) .content__text,
+.content:nth-of-type(4n) .content__text,
+.content:nth-of-type(5n) .content__text {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  text-align: left !important;
+}
+
+/* Fix spacing between sections */
+.content {
+  margin-bottom: 4rem; /* Increased from 3rem for more space between sections */
+}
+
+/* Ensure consistent padding in content sections */
+.content--padded {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Add space between cards within the same section */
+.card {
+  margin-bottom: 2em; /* Add 2em space between cards as requested */
+}
+
+/* Ensure services section has proper spacing */
+#services .card {
+  margin-bottom: 2em; /* Space between the services intro card and the next section */
+}
+
+/* Add spacing between service blocks */
+.services-grid {
+  margin-bottom: 2em; /* Space after the services grid */
+}
+
+.services-grid .service-block {
+  margin-bottom: 2em; /* Space between individual service blocks */
+}
+
+/* Strategic integration spacing */
+.strategic-integration {
+  margin-bottom: 2em; /* Space after strategic integration section */
+  padding: 2rem; /* Consistent padding with other cards */
+}
+
+/* Make sure grid elements don't overlap with content below */
+.grid {
+  margin-bottom: 2em;
+}
+
+/* Add 3em top padding for the last three sections */
+section:nth-last-of-type(-n+3) {
+  padding-top: 3em !important;
+  margin-top: 3em;
+}
+
+/* Fix title alignment and spacing */
+.content__title {
+  padding: 2rem;
+  background: rgba(26, 23, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+}
+
+.content__title-main {
+  text-align: left;
+}
+
+/* Add spacing between grid sections and titles */
+.content--full {
+  margin-bottom: 5rem;
+}
+
+/* Card footer styles */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Card grid layout */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+/* Apply card design to existing elements */
+.service-block {
+  background: rgba(26, 23, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-block:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Apply the same animated gradient border effect to service blocks */
+.service-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px; /* Match card border radius */
+  padding: 2px; /* Border thickness */
+  background: linear-gradient(
+    90deg, 
+    var(--color-link) 0%, 
+    var(--color-link-hover) 25%, 
+    var(--color-bg-frame) 50%, 
+    var(--color-link-hover) 75%, 
+    var(--color-link) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.service-block:hover::before {
+  opacity: 1;
+  animation: gradientMove 3s linear infinite;
+}
+
+/* Apply card design to testimonials */
+.testimonial-content {
+  background: rgba(26, 23, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Apply animated gradient to testimonials */
+.testimonial-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(
+    90deg, 
+    var(--color-link) 0%, 
+    var(--color-link-hover) 25%, 
+    var(--color-bg-frame) 50%, 
+    var(--color-link-hover) 75%, 
+    var(--color-link) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.testimonial-content:hover::before {
+  opacity: 1;
+  animation: gradientMove 3s linear infinite;
+}
+
+/* Apply card design to team members */
+.team-member {
+  background: rgba(26, 23, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Apply animated gradient to team members */
+.team-member::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(
+    90deg, 
+    var(--color-link) 0%, 
+    var(--color-link-hover) 25%, 
+    var(--color-bg-frame) 50%, 
+    var(--color-link-hover) 75%, 
+    var(--color-link) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.team-member:hover::before {
+  opacity: 1;
+  animation: gradientMove 3s linear infinite;
+}
+
+/* Apply card design to contact form */
+.contact-form {
+  background: rgba(26, 23, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Apply animated gradient to contact form */
+.contact-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(
+    90deg, 
+    var(--color-link) 0%, 
+    var(--color-link-hover) 25%, 
+    var(--color-bg-frame) 50%, 
+    var(--color-link-hover) 75%, 
+    var(--color-link) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contact-form:hover::before {
+  opacity: 1;
+  animation: gradientMove 3s linear infinite;
+}
+
+/* Apply card design to strategic integration section */
+.strategic-integration {
+  background: rgba(138, 111, 77, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Apply animated gradient to strategic integration */
+.strategic-integration::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(
+    90deg, 
+    var(--color-link) 0%, 
+    var(--color-link-hover) 25%, 
+    var(--color-bg-frame) 50%, 
+    var(--color-link-hover) 75%, 
+    var(--color-link) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.strategic-integration:hover::before {
+  opacity: 1;
+  animation: gradientMove 3s linear infinite;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}

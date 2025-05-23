@@ -69,6 +69,9 @@ class TextAnimations {
       // Split text into words for animation
       const words = this.splitTextIntoSpans(title, 'word');
       
+      // Determine animation style based on title type
+      const isMainTitle = title.classList.contains('content__title-main');
+      
       // Create animation
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -76,18 +79,29 @@ class TextAnimations {
           start: 'top bottom-=100',
           end: 'bottom center',
           toggleActions: 'play none none none',
-          once: false
+          once: false,
+          scrub: isMainTitle ? 0.3 : false // Add scrub for main titles
         }
       });
       
-      // Determine animation style based on title type
-      const isMainTitle = title.classList.contains('content__title-main');
+      // Add fill masks to words for main titles
+      if (isMainTitle) {
+        words.forEach(word => {
+          // Create a mask element for the fill effect
+          const mask = document.createElement('span');
+          mask.className = 'text-fill-mask';
+          
+          // Add the mask to the word
+          word.style.position = 'relative';
+          word.appendChild(mask);
+        });
+      }
       
       if (isMainTitle) {
-        // More dramatic animation for main titles
+        // More dramatic animation for main titles with fill effect
         tl.fromTo(words, {
           opacity: 0,
-          y: 80,
+          y: 60,
           rotateX: 45,
           scale: 0.8,
           transformOrigin: '0% 50% -50'
@@ -100,6 +114,16 @@ class TextAnimations {
           stagger: this.options.staggerAmount * 1.5,
           ease: 'expo.out'
         });
+        
+        // Animate the fill masks with a staggered effect
+        tl.fromTo(title.querySelectorAll('.text-fill-mask'), {
+          scaleX: 0
+        }, {
+          scaleX: 1,
+          duration: this.options.animationDuration * 1.5,
+          stagger: this.options.staggerAmount * 2,
+          ease: 'power1.inOut'
+        }, '<0.3');
         
         // Add subtle follow-up animation for emphasis
         tl.to(words, {
@@ -155,21 +179,41 @@ class TextAnimations {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: paragraph,
-          start: 'top bottom-=50',
-          end: 'bottom center',
+          start: 'top bottom-=100', // Start earlier
+          end: 'bottom center+=50', // End a bit later
           toggleActions: 'play none none none',
-          once: false
+          once: false,
+          scrub: 0.2 // Add smooth scrubbing effect for opacity fill
         }
       });
       
       // Determine if this is a content__text paragraph for special treatment
       const isContentText = paragraph.classList.contains('content__text');
       
+      // Add line masks for opacity fill effect only in black sections
+      const isBlackSection = paragraph.closest('.content--padded') && 
+                            !paragraph.closest('.content--padded').classList.contains('content--full');
+      
+      if (isBlackSection) {
+        lines.forEach(line => {
+          // Create a mask element for the fill effect
+          const mask = document.createElement('span');
+          mask.className = 'text-fill-mask';
+          
+          // Add the mask to the line
+          line.style.position = 'relative';
+          line.style.display = 'inline-block';
+          line.appendChild(mask);
+        });
+      }
+      
       if (isContentText) {
-        // More elaborate animation for main content text
+        // Enhanced animation for main content text with opacity fill effect
+        
+        // First animate the lines into view
         tl.fromTo(lines, {
           opacity: 0,
-          y: 40,
+          y: 30,
           rotateX: 5,
           transformOrigin: '0% 50% 0'
         }, {
@@ -180,6 +224,16 @@ class TextAnimations {
           stagger: this.options.staggerAmount * 1.2,
           ease: 'power2.out'
         });
+        
+        // Then animate the fill masks one by one
+        tl.fromTo(paragraph.querySelectorAll('.text-fill-mask'), {
+          scaleX: 0
+        }, {
+          scaleX: 1,
+          duration: this.options.animationDuration * 1.5,
+          stagger: this.options.staggerAmount * 1.5,
+          ease: 'power1.inOut'
+        }, '<0.2');
         
         // Add subtle follow-up animation for emphasis on first line only
         if (lines.length > 0) {
@@ -194,10 +248,10 @@ class TextAnimations {
           }, `>-${this.options.animationDuration * 0.3}`);
         }
       } else {
-        // Standard animation for regular paragraphs
+        // Enhanced animation for regular paragraphs with opacity fill effect
         tl.fromTo(lines, {
           opacity: 0,
-          y: 30
+          y: 20
         }, {
           opacity: 1,
           y: 0,
@@ -205,6 +259,16 @@ class TextAnimations {
           stagger: this.options.staggerAmount,
           ease: this.options.ease
         });
+        
+        // Animate the fill masks with a slight delay
+        tl.fromTo(paragraph.querySelectorAll('.text-fill-mask'), {
+          scaleX: 0
+        }, {
+          scaleX: 1,
+          duration: this.options.animationDuration,
+          stagger: this.options.staggerAmount,
+          ease: 'power1.inOut'
+        }, '<0.1');
       }
       
       // Store reference
@@ -228,22 +292,44 @@ class TextAnimations {
       // Mark as processed
       text.classList.add('text-animated');
       
+      // Create a mask element for the fill effect
+      const mask = document.createElement('span');
+      mask.className = 'text-fill-mask';
+      
+      // Add the mask to the text
+      text.style.position = 'relative';
+      text.appendChild(mask);
+      
       // Create animation
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: text,
-          start: 'top bottom-=50',
-          toggleActions: 'play none none none'
+          start: 'top bottom-=80',
+          end: 'bottom center',
+          toggleActions: 'play none none none',
+          scrub: 0.1 // Add smooth scrubbing effect for opacity fill
         }
       });
       
       // Animate the small text
-      tl.from(text, {
+      tl.fromTo(text, {
         opacity: 0,
-        y: 20,
+        y: 15
+      }, {
+        opacity: 1,
+        y: 0,
         duration: this.options.animationDuration * 0.6,
         ease: this.options.ease
       });
+      
+      // Animate the fill mask
+      tl.fromTo(mask, {
+        scaleX: 0
+      }, {
+        scaleX: 1,
+        duration: this.options.animationDuration * 0.8,
+        ease: 'power1.inOut'
+      }, '<0.1');
       
       // Store reference
       this.animatedElements.push({

@@ -57,6 +57,24 @@
 .split-line {
   display: block;
   margin-bottom: 0.1em; /* Slight spacing between lines */
+  position: relative; /* Ensure position for fill mask */
+}
+
+/* Text fill animation elements */
+.text-fill-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, var(--color-link) 0%, var(--color-link-hover) 100%);
+  transform-origin: left;
+  transform: scaleX(0);
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  z-index: -1;
+  border-radius: 2px;
+  pointer-events: none;
 }
 
 /* Ensure proper spacing between words */
