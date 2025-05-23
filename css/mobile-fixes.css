@@ -1,0 +1,148 @@
+/* Mobile UI Fixes */
+
+/* Base mobile improvements */
+@media screen and (max-width: 768px) {
+  :root {
+    --side-padding: 1rem;
+    --page-padding: 0.5rem;
+  }
+  
+  html, body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Improve header layout on mobile */
+  .frame {
+    height: auto;
+    min-height: 60vh;
+    padding: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas: 
+      "logo"
+      "title"
+      "subline"
+      "tags";
+    gap: 1rem;
+  }
+  
+  .frame__title {
+    font-size: 3rem;
+    line-height: 0.9;
+    padding-top: 0.5rem;
+  }
+  
+  .frame__logo {
+    justify-self: start;
+  }
+  
+  .frame__subline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .frame__links {
+    margin-top: 0.5rem;
+  }
+  
+  .frame__cta {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 100;
+  }
+  
+  /* Content sections */
+  .content {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .content--full {
+    height: auto;
+    min-height: 50vh;
+  }
+  
+  .content__text {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+  }
+  
+  /* Fix grid layouts */
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .grid__img {
+    width: 150px;
+    height: 150px;
+    transform: none !important;
+    position: relative;
+    margin: 0.25rem;
+  }
+  
+  /* Services section */
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .service-block {
+    padding: 1.5rem;
+  }
+  
+  /* Contact form */
+  .contact-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  /* Team section */
+  .team-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  /* Footer */
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+  
+  .footer-links {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+  .frame__title {
+    font-size: 2.5rem;
+  }
+  
+  .grid__img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .content__title-main {
+    font-size: 2rem;
+  }
+}
