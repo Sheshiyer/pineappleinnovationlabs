@@ -1,0 +1,172 @@
+/**
+ * Effects CSS
+ * Additional styles for visual effects and animations
+ */
+
+/* --------------------------------
+ * Noise Overlay
+ * -------------------------------- */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+  opacity: 0.25; /* Match JS default */
+}
+
+/* --------------------------------
+ * Gradient Blobs
+ * -------------------------------- */
+.gradient-blobs-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1; /* Behind content but above background */
+}
+
+.gradient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform, opacity, filter;
+  transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+  mix-blend-mode: screen; /* Enhanced blending for better visibility */
+}
+
+/* --------------------------------
+ * Text Animation Elements
+ * -------------------------------- */
+.split-char,
+.split-word,
+.split-line {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+  overflow: hidden;
+  position: relative; /* For potential pseudo-element effects */
+}
+
+.split-line {
+  display: block;
+  margin-bottom: 0.1em; /* Slight spacing between lines */
+}
+
+/* Ensure proper spacing between words */
+.split-word + .split-word {
+  margin-left: 0.25em;
+}
+
+/* Enhanced styling for animated text */
+.text-animated .split-word {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Hover effects for main titles */
+.content__title-main .split-word:hover {
+  color: var(--color-link);
+  transform: translateY(-2px);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Prevent FOUC (Flash of Unstyled Content) */
+.js .loading .text-animated {
+  opacity: 0;
+}
+
+/* --------------------------------
+ * Animation Utilities
+ * -------------------------------- */
+.perspective-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  overflow: visible !important;
+}
+
+/* Animation delays for staggered effects */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* Ensure animations don't run for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .split-char,
+  .split-word,
+  .split-line,
+  .gradient-blob,
+  .noise-overlay {
+    transition: none !important;
+    animation: none !important;
+    will-change: auto;
+  }
+  
+  .noise-overlay {
+    display: none;
+  }
+  
+  .gradient-blob {
+    opacity: 0.2 !important; /* Reduced opacity for static display */
+    filter: blur(100px) !important;
+  }
+}
+
+/* --------------------------------
+ * Performance Optimizations
+ * -------------------------------- */
+.content {
+  /* Improve performance for fixed elements */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  position: relative; /* Ensure proper stacking context */
+  z-index: 2; /* Above background effects */
+}
+
+/* Optimize for high-performance animations */
+.high-performance {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* --------------------------------
+ * Enhanced Visual Effects
+ * -------------------------------- */
+/* Subtle text shadow for better readability over blobs */
+.content__text {
+  text-shadow: 0 0 20px rgba(26, 23, 20, 0.3);
+}
+
+/* Enhanced title styling */
+.content__title-main {
+  position: relative;
+  z-index: 3; /* Ensure above other elements */
+}
+
+/* Add subtle glow to main titles */
+.content__title-main::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(255, 184, 112, 0.15) 0%, rgba(255, 184, 112, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.content__title-main:hover::after {
+  opacity: 1;
+}

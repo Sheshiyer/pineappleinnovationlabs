@@ -1,0 +1,21 @@
+/**
+ * Custom Fonts
+ */
+
+/* RintBasic - For Pineapple Labs */
+@font-face {
+  font-family: 'RintBasic';
+  src: url('../fonts/RintBasic-R99zA.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* RishgularModel - For h1 and h2 titles */
+@font-face {
+  font-family: 'RishgularModel';
+  src: url('../fonts/RishgularModel-G3ajm.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
